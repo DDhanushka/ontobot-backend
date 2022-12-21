@@ -21,7 +21,7 @@ class ODPFactory:
     def get_ontouml_odp(cls, pattern, parsed_json):
         match pattern:
             case 'subkind':
-                print(parsed_json)
+                # print(parsed_json)
                 return subkind.Subkind(parsed_json)
             # case 'phase':
             #     return phase.Phase(parsed_json)
