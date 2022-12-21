@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 
 from ontobot.services.subkind import Subkind
 from ontobot.services.factory import ODPFactory
+from ontobot.services.owl import OWL
 
 from ontobot.model.expense import Expense, ExpenseSchema
 from ontobot.model.income import Income, IncomeSchema
@@ -10,12 +11,12 @@ from ontobot.model.transaction_type import TransactionType
 
 app = Flask(__name__)
 
-transactions = [
-    Income('Salary', 5000),
-    Income('Dividends', 200),
-    Expense('pizza', 50),
-    Expense('Rock Concert', 100)
-]
+# transactions = [
+#     Income('Salary', 5000),
+#     Income('Dividends', 200),
+#     Expense('pizza', 50),
+#     Expense('Rock Concert', 100)
+# ]
 
 data = {}
 
@@ -58,7 +59,9 @@ def get_ontos():
     sk: Subkind = ODPFactory.get_ontouml_odp(
         'subkind', data)
     sk.check_subkind()
-    return jsonify(sk.get_subkind_list())
+    owl_res = OWL(data)
+    # print(owl_res.get_taxonomy_json())
+    return jsonify(owl_res.get_taxonomy_json())
 
 
 @app.route('/onto', methods=['POST'])
