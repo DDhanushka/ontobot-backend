@@ -7,6 +7,7 @@ from ontobot.services.owl import OWL
 
 app = Flask(__name__)
 
+# add new line
 data = {}
 
 @app.route('/onto')
