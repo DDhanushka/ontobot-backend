@@ -3,7 +3,7 @@ import json
 # from utils import owl
 
 from ontobot.services import subkind
-# from rules import phase
+from ontobot.services import phase
 # from rules import category
 # from rules import role
 # from rules import rolemixin
@@ -23,8 +23,8 @@ class ODPFactory:
             case 'subkind':
                 # print(parsed_json)
                 return subkind.Subkind(parsed_json)
-            # case 'phase':
-            #     return phase.Phase(parsed_json)
+            case 'phase':
+                return phase.Phase(parsed_json)
             # case 'category':
             #     return category.Category(parsed_json)
             # case 'rolemixin':
