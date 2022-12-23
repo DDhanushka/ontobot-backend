@@ -11,13 +11,14 @@ rule_json = json.loads(rule_contents)
 class Subkind:
     __taxonomy_list = []
     __subkind_list = []
-    __subkind_onto = onto.Taxonomy()
+    __subkind_onto = {}
 
     def __init__(self, arr):
-        meta_data = self.__subkind_onto.get_stack(arr['taxonomies'])
-        self.__taxonomy_list = meta_data
+        self.__subkind_list.clear()
+        self.__subkind_onto = onto.Taxonomy()
+        self.__taxonomy_list = self.__subkind_onto.get_stack(arr['subclasses'])
 
-    def check_subkind(self):
+    def __check_subkind(self):
         super_class = {}
         for index in range(len(self.__taxonomy_list) - 1):
             current_item = self.__taxonomy_list[index]
@@ -45,14 +46,15 @@ class Subkind:
             if ('disjoint' in current_item) and len(current_item['disjoint']) == 0:
                 sub_class = next_item
                 is_disjoint_complete = self.__subkind_onto.is_disjoint_complete(super_class, sub_class)
-                if (sub_class['stereotype'] == 'subkind') and is_parent_valid:
+                if (sub_class['stereotype'] == 'subkind') and is_parent_valid and not is_disjoint_complete:
                     if super_class['class_name'] not in self.__subkind_list:
                         self.__subkind_list.append(super_class['class_name'])
-                    if sub_class['class_name'] not in self.__subkind_list and not is_disjoint_complete:
+                    if sub_class['class_name'] not in self.__subkind_list:
                         self.__subkind_list.append(sub_class['class_name'])
 
             # variant 02
             else:
+                d_classes_list:list = []
                 d_classes_list = current_item['disjoint']
                 for d_classes in d_classes_list:
                     result = self.__subkind_onto.get_selected_concepts(d_classes, 'subkind')
@@ -63,6 +65,10 @@ class Subkind:
                         for concept in result:
                             if concept['class_name'] not in self.__subkind_list:
                                 self.__subkind_list.append(concept['class_name'])
+                
+                
+                
 
     def get_subkind_list(self):
+        self.__check_subkind()
         return self.__subkind_list

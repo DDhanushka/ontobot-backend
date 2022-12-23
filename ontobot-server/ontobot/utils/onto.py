@@ -36,23 +36,23 @@ class Taxonomy:
 
         return self.__stack
 
-    @classmethod
-    def get_selected_concepts(cls, concepts: list, stereotype):
+    
+    def get_selected_concepts(self, concepts: list, stereotype):
         concept_result = []
         for cname in concepts:
-            for concept in cls.__meta_stack:
+            for concept in self.__meta_stack:
                 if concept['class_name'] == cname and concept['stereotype'] == stereotype:
                     concept_result.append(concept)
                     break
 
         return concept_result
 
-    @classmethod
-    def get_stack(cls, input_stack: list):
+    
+    def get_stack(self,input_stack: list):
         temp = []  # used to store class names temporarily
         final = []  # used to store concept's objects
 
-        internal_stack = cls.__rec_traverse_taxonomy(Taxonomy(), input_stack)
+        internal_stack = self.__rec_traverse_taxonomy(input_stack)
 
         for item in internal_stack:
             current_level = item[2]
@@ -75,29 +75,24 @@ class Taxonomy:
                 )
                 temp.append(concept.class_name)
 
-        cls.__meta_stack = final
-        return final
+        self.__meta_stack = final
+        internal_stack.clear()
+        return self.__meta_stack
 
-    @classmethod
-    def find_super_class(cls, next_item, current_index):
+    def find_super_class(self, next_item, current_index):
         super_level = next_item['level'] - 1
         for index in range(current_index, -1, -1):
-            concept = cls.__meta_stack[index]
+            concept = self.__meta_stack[index]
             if concept['level'] == super_level:
                 return concept
 
-    @classmethod
-    def is_disjoint_complete(cls, super_class, sub_class):
+    def is_disjoint_complete(self, super_class, sub_class):
         disjoint_classes_list = super_class['disjoint']
         for disjoint_classes in disjoint_classes_list:
             if sub_class['class_name'] in disjoint_classes:
                 return True
 
         return False
-
-    @classmethod
-    def get_owl(cls):
-        pass
 
 
 class OP:
