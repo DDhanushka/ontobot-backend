@@ -3,12 +3,14 @@ from ontobot.utils import onto
 
 class OWL:
     __taxonomy_list = []
-    __owl_onto = onto.Taxonomy()
+    __owl_onto = {}
     __owl_stack = []
     __concept_list = []
 
     def __init__(self, input_list):
         self.__concept_list.clear()
+        self.__owl_stack.clear()
+        self.__owl_onto = onto.Taxonomy()
         self.__taxonomy_list = self.__owl_onto.get_stack(input_list['subclasses'])
 
     def __is_already_super_class(self, super_class):
