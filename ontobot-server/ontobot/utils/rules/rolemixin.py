@@ -77,10 +77,18 @@ class RMixin:
             else:
                 sub_class = next_item
                 if sub_class['stereotype'] == 'role':
-                    if super_class['class_name'] not in self.__mixin_list:
-                        self.__mixin_list.append(super_class['class_name'])
-                    if sub_class['class_name'] not in self.__mixin_list:
-                        self.__mixin_list.append(sub_class['class_name'])
+                    if len(super_class['disjoint']) > 0:
+                        is_disjoint_complete = self.__mixin_onto.is_disjoint_complete(super_class, sub_class)
+                        if not is_disjoint_complete:
+                            if super_class['class_name'] not in self.__mixin_list:
+                                self.__mixin_list.append(super_class['class_name'])
+                            if sub_class['class_name'] not in self.__mixin_list:
+                                self.__mixin_list.append(sub_class['class_name'])
+                    else:
+                        if super_class['class_name'] not in self.__mixin_list:
+                            self.__mixin_list.append(super_class['class_name'])
+                        if sub_class['class_name'] not in self.__mixin_list:
+                            self.__mixin_list.append(sub_class['class_name'])
 
     def get_rolemixin_list(self):
         self.__check_rolemixin()
