@@ -63,10 +63,10 @@ class Category:
             else:
                 sub_class = next_item
                 is_disjoint_complete = self.__category_onto.is_disjoint_complete(super_class, sub_class)
-                if is_parent_valid and sub_class['stereotype'] in rule_json['ontoUML']['nonsortaluniversal']:
+                if is_parent_valid and sub_class['stereotype'] in rule_json['ontoUML']['nonsortaluniversal'] and not is_disjoint_complete:
                     if super_class['class_name'] not in self.__category_list:
                         self.__category_list.append(super_class['class_name'])
-                    if sub_class['class_name'] not in self.__category_list and not is_disjoint_complete:
+                    if sub_class['class_name'] not in self.__category_list:
                         self.__category_list.append(sub_class['class_name'])
 
     def get_category_list(self):
