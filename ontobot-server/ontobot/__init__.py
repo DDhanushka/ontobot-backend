@@ -1,31 +1,23 @@
-import json
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 
-from ontobot.services.subkind import Subkind
-from ontobot.services.factory import ODPFactory
-from ontobot.services.owl import OWL
+from ontobot.services import taxonomy_service
 
 app = Flask(__name__)
 
 # add new line
 data = {}
 
-@app.route('/onto')
+
+@app.route('/onto/checkpoint_1/generate')
 def get_ontos():
-    # parsed_json = json.loads(data)
-    sk: Subkind = ODPFactory.get_ontouml_odp(
-        'subkind', data)
-    sk.check_subkind()
-    owl_res = OWL(data)
-    # print(owl_res.get_taxonomy_json())
-    return jsonify(owl_res.get_taxonomy_json())
+    return taxonomy_service.get_taxonomy_owl(data)
 
 
-@app.route('/onto', methods=['POST'])
+@app.route('/onto/checkpoint_1/validate', methods=['POST'])
 def add_ontos():
     global data
     data = request.get_json()
-    return "", 204
+    return taxonomy_service.validate_taxonomy_service(request.get_json())
 
 
 if __name__ == "__main__":
